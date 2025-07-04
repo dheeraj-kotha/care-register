@@ -24,8 +24,8 @@ jobs:
       - name: Log current UTC time
         run: date -u    
 
-     - name: Install Selenium & ChromeDriver
-       run: |
+      - name: Install Selenium & ChromeDriver
+        run: |
          pip install selenium
          sudo apt-get update
          sudo apt-get install -y chromium-browser chromium-chromedriver
