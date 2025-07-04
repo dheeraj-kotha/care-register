@@ -24,8 +24,8 @@ try:
     driver.find_element(By.NAME, "aptNumber").send_keys("1365")
     driver.find_element(By.NAME, "make").send_keys("BMW")
     driver.find_element(By.NAME, "model").send_keys("360i")
-    driver.find_element(By.NAME, "licensePlate").send_keys("RBV6983")
-    driver.find_element(By.NAME, "confirmLicensePlate").send_keys("RBV6983")
+    driver.find_element(By.NAME, "licensePlate").send_keys("RBV6986")
+    driver.find_element(By.NAME, "confirmLicensePlate").send_keys("RBV6986")
     driver.find_element(By.XPATH, "//button[contains(text(), 'Next')]").click()
 
     # Wait for the next page to load and content to be visible
