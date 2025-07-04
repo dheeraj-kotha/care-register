@@ -11,23 +11,28 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4 # Clones your repository to the runner
+      uses: actions/checkout@v4 # Clones your repository to the runner (includes chromedriver-linux64.zip)
 
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.x' # Use the latest Python 3 version
+        python-version: '3.x'
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install selenium
-        # No need to install Chrome via apt-get if we use Chrome for Testing binary
 
+    - name: Download Chrome Browser for Testing
+      run: |
+        # Download Chrome 138 for Linux 64-bit directly in the workflow
+        # This URL comes from the Chrome for Testing availability page you looked at
+        curl -L -o chrome-linux64.zip https://storage.googleapis.com/chrome-for-testing-public/138.0.7204.92/linux64/chrome-linux64.zip
+      
     - name: Extract Chrome Browser and Chromedriver
       run: |
-        unzip -o chrome-linux64.zip -d . # Extract Chrome to current dir
-        unzip -o chromedriver-linux64.zip -d . # Extract Chromedriver to current dir
+        unzip -o chrome-linux64.zip -d . # Extract downloaded Chrome to current dir
+        unzip -o chromedriver-linux64.zip -d . # Extract Chromedriver (from repo) to current dir
 
     - name: Make Chrome and Chromedriver Executable
       run: |
@@ -43,5 +48,5 @@ jobs:
         name: confirmation-screenshot
         path: |
           confirmation.png
-          error_screenshot.png # Also upload error screenshot if it exists
-        if-no-files-found: ignore # Don't fail if screenshot isn't there
+          error_screenshot.png
+        if-no-files-found: ignore
