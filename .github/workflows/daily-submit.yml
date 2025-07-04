@@ -1,8 +1,6 @@
-name: submit-form
+name: Submit parking form
 
 on:
-  schedule:
-    - cron: '0 4 * * *'  # 11 PM CDT
   workflow_dispatch:
 
 jobs:
@@ -18,30 +16,32 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Download and install latest Chrome + Chromedriver (stable)
+      - name: Install dependencies
         run: |
-          curl -sSL https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json -o chrome.json
-          CHROME_URL=$(jq -r '.channels.Stable.downloads.chrome[] | select(.platform=="linux64") | .url' chrome.json)
-          DRIVER_URL=$(jq -r '.channels.Stable.downloads.chromedriver[] | select(.platform=="linux64") | .url' chrome.json)
+          sudo apt-get update
+          sudo apt-get install -y unzip wget curl
+          pip install selenium
 
-          wget -q $CHROME_URL -O chrome.zip
-          unzip chrome.zip
-          sudo mv chrome-linux64 /opt/chrome
-          sudo ln -sf /opt/chrome/chrome /usr/bin/google-chrome
+      - name: Install Chrome
+        run: |
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt install -y ./google-chrome-stable_current_amd64.deb
 
-          wget -q $DRIVER_URL -O chromedriver.zip
+      - name: Install ChromeDriver (matching Chrome version)
+        run: |
+          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
+          CHROMEDRIVER_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json" \
+            | jq -r --arg v "$CHROME_VERSION" '.channels.Stable.downloads.chromedriver[] | select(.platform == "linux64") | .url')
+          wget -O chromedriver.zip "$CHROMEDRIVER_VERSION"
           unzip chromedriver.zip
           sudo mv chromedriver-linux64/chromedriver /usr/bin/chromedriver
           sudo chmod +x /usr/bin/chromedriver
 
-      - name: Install dependencies
-        run: pip install selenium
-
       - name: Run form submit script
-        run: python submit.py
+        run: python form_submit.py
 
       - name: Upload screenshot
         uses: actions/upload-artifact@v4
         with:
-          name: confirmation
+          name: confirmation-screenshot
           path: confirmation.png
