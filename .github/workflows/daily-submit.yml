@@ -2,8 +2,8 @@ name: Daily Car Register
 
 on:
   schedule:
-     - cron: '19 4 * * *'  # 10:18 PM CST (4:18 AM UTC)
-     - cron: '22 4 * * *'  # Runs daily at 1:30 PM UTC (8:30 AM CDT)
+     - cron: '24 3 * * *'  # 10:18 PM CDT
+     - cron: '26 3 * * *' # Runs daily at 1:30 PM UTC (8:30 AM CDT)
   workflow_dispatch:        # Optional: allow manual trigger
 
 jobs:
