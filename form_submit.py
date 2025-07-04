@@ -21,6 +21,11 @@ chrome_options.add_argument("--disable-dev-shm-usage") # Overcomes limited resou
 chrome_options.add_argument("--window-size=1920,1080") # Set a consistent window size
 chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36")
 chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+chrome_options.add_argument("--disable-gpu") # May help on some systems or with certain rendering detections
+chrome_options.add_argument("--disable-extensions") # Disable browser extensions
+chrome_options.add_argument("--no-first-run") # Suppress first-run dialogs
+chrome_options.add_argument("--no-default-browser-check") # Suppress default browser check
+chrome_options.add_argument("--incognito") # Start in incognito mode (clean session)
 chrome_options.binary_location = CHROME_BINARY_PATH # Tell Selenium where to find the Chrome binary
 
 # Set up the Chromedriver service
