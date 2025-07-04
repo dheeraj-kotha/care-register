@@ -29,9 +29,9 @@ try:
     time.sleep(5)
 
     # Save screenshot
-    screenshot_path = os.path.join(os.getcwd(), "confirmation.png")
-    driver.save_screenshot(screenshot_path)
-    print(f"✅ Form submitted and screenshot saved at: {screenshot_path}")
+   # ✅ Save screenshot to current directory
+    driver.save_screenshot("./confirmation.png")
+    print("✅ Form submitted successfully and screenshot saved!")
 
 except Exception as e:
     print(f"❌ Error: {e}")
