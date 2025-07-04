@@ -2,7 +2,7 @@ name: submit-form
 
 on:
   schedule:
-    - cron: '0 4 * * *'  # 11 PM CST
+    - cron: '0 4 * * *'  # 11 PM CDT
   workflow_dispatch:
 
 jobs:
@@ -18,21 +18,23 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Chrome and Chromedriver (v124 manual method)
+      - name: Download and install latest Chrome + Chromedriver (stable)
         run: |
-          # Install Chrome
-          wget https://storage.googleapis.com/chrome-for-testing-public/124.0.6367.91/linux/x64/chrome-linux64.zip
-          unzip chrome-linux64.zip
-          sudo mv chrome-linux64 /opt/chrome
-          sudo ln -s /opt/chrome/chrome /usr/bin/google-chrome
+          curl -sSL https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json -o chrome.json
+          CHROME_URL=$(jq -r '.channels.Stable.downloads.chrome[] | select(.platform=="linux64") | .url' chrome.json)
+          DRIVER_URL=$(jq -r '.channels.Stable.downloads.chromedriver[] | select(.platform=="linux64") | .url' chrome.json)
 
-          # Install Chromedriver
-          wget https://storage.googleapis.com/chrome-for-testing-public/124.0.6367.91/linux/x64/chromedriver-linux64.zip
-          unzip chromedriver-linux64.zip
+          wget -q $CHROME_URL -O chrome.zip
+          unzip chrome.zip
+          sudo mv chrome-linux64 /opt/chrome
+          sudo ln -sf /opt/chrome/chrome /usr/bin/google-chrome
+
+          wget -q $DRIVER_URL -O chromedriver.zip
+          unzip chromedriver.zip
           sudo mv chromedriver-linux64/chromedriver /usr/bin/chromedriver
           sudo chmod +x /usr/bin/chromedriver
 
-      - name: Install Selenium
+      - name: Install dependencies
         run: pip install selenium
 
       - name: Run form submit script
