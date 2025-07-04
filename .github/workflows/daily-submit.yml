@@ -2,8 +2,8 @@ name: Submit parking form
 
 on:
   schedule:
-    - cron: '0 4 * * *' # Runs every day at 4 AM UTC (adjust if needed for your timezone)
-  workflow_dispatch: # This enables manual triggering from GitHub Actions UI
+    - cron: '0 4 * * *' # This runs the workflow daily at 4 AM UTC
+  workflow_dispatch: # This enables the "Run workflow" button in the GitHub UI
 
 jobs:
   submit-form:
@@ -31,23 +31,29 @@ jobs:
       - name: Install dependencies
         run: pip install selenium
 
-      - name: Debug - Print GITHUB_WORKSPACE and list files
+      - name: Debug - Print GITHUB_WORKSPACE and list files (Before Script)
         run: |
           echo "GITHUB_WORKSPACE is: $GITHUB_WORKSPACE"
-          ls -la $GITHUB_WORKSPACE
-          ls -la . # Also list files in current working directory
+          echo "Contents of current directory (should be GITHUB_WORKSPACE before script):"
+          ls -la .
+          echo "Contents of /tmp (just in case):"
+          ls -la /tmp # Check if selenium saves somewhere unexpected
 
       - name: Run form submit script
         run: python form_submit.py
 
-      - name: Debug - List files after script run
+      - name: Debug - List files after script run (Check for screenshot)
         run: |
-          echo "Files after script run:"
-          ls -la $GITHUB_WORKSPACE
+          echo "Files in current directory (after script run):"
           ls -la .
+          echo "Is confirmation.png present in current directory?"
+          find . -name "confirmation.png" # Explicitly search for the file
 
       - name: Upload screenshot
         uses: actions/upload-artifact@v4
         with:
           name: confirmation
           path: confirmation.png
+          # If the screenshot still isn't found at 'confirmation.png' after the above debug,
+          # it might be necessary to try an absolute path, but let's debug first.
+          # path: ${{ github.workspace }}/confirmation.png # Alternative, usually same as 'confirmation.png'
