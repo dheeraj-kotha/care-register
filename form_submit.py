@@ -27,8 +27,25 @@ service = Service(executable_path=CHROMEDRIVER_EXECUTABLE_PATH)
 driver = None
 try:
     print("Navigating to URL...")
+    print(f"Attempting to launch Chrome with binary: {CHROME_BINARY_PATH}")
+    print(f"Using ChromeDriver from: {CHROMEDRIVER_EXECUTABLE_PATH}")
+
     driver = webdriver.Chrome(service=service, options=chrome_options)
-    driver.get("https://www.register2park.com/register?key=4wddrlcphom8") # Replace with your actual URL
+    target_url = "https://www.register2park.com/register?key=4wddrlcphom8" # Store target URL
+    driver.get(target_url)
+    print(f"Requested URL: {target_url}") # Log requested URL
+    time.sleep(2) # Give a moment for any redirects to complete
+    print(f"Actual URL after navigation: {driver.current_url}") # Log actual current URL
+
+    # Check if the actual URL matches the expected URL
+    if driver.current_url != target_url:
+        print(f"Warning: Browser redirected from {target_url} to {driver.current_url}")
+        # Take an immediate screenshot if redirection occurs
+        redirect_screenshot_name = "redirect_screenshot.png"
+        driver.save_screenshot(redirect_screenshot_name)
+        print(f"Screenshot of redirected page saved to: {redirect_screenshot_name}")
+
+
     print("Page loaded. Attempting to fill form...")
 
     # Wait for the "Apartment Number" field
