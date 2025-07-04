@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+import os
 import time
 
 chrome_options = Options()
@@ -17,18 +18,20 @@ try:
     driver.get("https://www.register2park.com/register?key=4wddrlcphom8")
     time.sleep(3)
 
-        # Fill the form
+    # Fill the form
     driver.find_element(By.NAME, "aptNumber").send_keys("1365")
     driver.find_element(By.NAME, "make").send_keys("BMW")
     driver.find_element(By.NAME, "model").send_keys("360i")
     driver.find_element(By.NAME, "licensePlate").send_keys("RBV6983")
     driver.find_element(By.NAME, "confirmLicensePlate").send_keys("RBV6983")
-
     driver.find_element(By.XPATH, "//button[contains(text(), 'Next')]").click()
 
     time.sleep(5)
-    driver.save_screenshot("confirmation.png")
-    print("✅ Form submitted successfully and screenshot saved!")
+
+    # Save screenshot
+    screenshot_path = os.path.join(os.getcwd(), "confirmation.png")
+    driver.save_screenshot(screenshot_path)
+    print(f"✅ Form submitted and screenshot saved at: {screenshot_path}")
 
 except Exception as e:
     print(f"❌ Error: {e}")
