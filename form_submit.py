@@ -8,7 +8,8 @@ import os
 
 # --- Define Paths to Chrome and Chromedriver ---
 # These paths are relative to where your script runs inside GitHub Actions.
-# We will extract them to these locations in the workflow file.
+# They point to the executables inside the folders that will be extracted
+# by your GitHub Actions workflow.
 CHROME_BINARY_PATH = './chrome-linux64/chrome'
 CHROMEDRIVER_EXECUTABLE_PATH = './chromedriver-linux64/chromedriver'
 
@@ -32,7 +33,7 @@ try:
 
     # Wait for the "Apartment Number" field
     apt_number_field = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.NAME, "Apartment Number:"))
+        EC.presence_of_element_located((By.NAME, "aptNumber"))
     )
     apt_number_field.send_keys("123") # Replace "123" with the actual apartment number
 
