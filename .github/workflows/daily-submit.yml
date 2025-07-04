@@ -42,6 +42,18 @@ jobs:
           echo "Contents of /tmp (just in case):"
           ls -la /tmp # Check if selenium saves somewhere unexpected
 
+      # ... (your existing steps before 'Run form submit script') ...
+
+      - name: Extract Chromedriver
+        run: |
+          unzip chromedriver-linux64.zip
+          # Assuming the zip extracts to a folder like 'chromedriver-linux64' which contains the 'chromedriver' binary
+          # Adjust 'mv' command if the extracted binary is in a different nested path, e.g., 'mv chromedriver-linux64/chromedriver-linux64/chromedriver .'
+          mv chromedriver-linux64/chromedriver . # Moves the executable to the root of the repo
+          
+      - name: Make Chromedriver Executable
+        run: chmod +x ./chromedriver # Now chmod is applied to the executable in the root    
+
       - name: Run form submit script
         run: python form_submit.py
 
@@ -51,9 +63,6 @@ jobs:
           ls -la .
           echo "Is confirmation.png present in current directory?"
           find . -name "confirmation.png" # Explicitly search for the file
-
-      - name: Make Chromedriver Executable
-        run: chmod +x ./chromedriver-linux64/chromedriver    
 
       - name: Upload screenshot
         uses: actions/upload-artifact@v4
