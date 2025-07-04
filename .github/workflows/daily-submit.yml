@@ -2,7 +2,7 @@ name: submit-form
 
 on:
   schedule:
-    - cron: '0 4 * * *'  # 4 AM UTC = 11 PM CDT
+    - cron: '0 4 * * *'  # 11 PM CST
   workflow_dispatch:
 
 jobs:
@@ -18,16 +18,18 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install specific Chrome version (v124)
+      - name: Install Chrome and Chromedriver (v124 manual method)
         run: |
-          wget https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_124.0.6367.91-1_amd64.deb
-          sudo apt install -y ./google-chrome-stable_124.0.6367.91-1_amd64.deb
+          # Install Chrome
+          wget https://storage.googleapis.com/chrome-for-testing-public/124.0.6367.91/linux/x64/chrome-linux64.zip
+          unzip chrome-linux64.zip
+          sudo mv chrome-linux64 /opt/chrome
+          sudo ln -s /opt/chrome/chrome /usr/bin/google-chrome
 
-      - name: Install matching ChromeDriver (v124)
-        run: |
-          wget https://chromedriver.storage.googleapis.com/124.0.6367.91/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip
-          sudo mv chromedriver /usr/bin/chromedriver
+          # Install Chromedriver
+          wget https://storage.googleapis.com/chrome-for-testing-public/124.0.6367.91/linux/x64/chromedriver-linux64.zip
+          unzip chromedriver-linux64.zip
+          sudo mv chromedriver-linux64/chromedriver /usr/bin/chromedriver
           sudo chmod +x /usr/bin/chromedriver
 
       - name: Install Selenium
