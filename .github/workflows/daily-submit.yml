@@ -28,6 +28,9 @@ jobs:
           sudo chmod +x /usr/bin/chromedriver
           echo 'export PATH=/opt/chrome:$PATH' >> $GITHUB_ENV
 
+      - name: List contents of Chromedriver directory
+        run: ls -la ./chromedriver-linux64/    
+
       - name: Install dependencies
         run: pip install selenium
 
