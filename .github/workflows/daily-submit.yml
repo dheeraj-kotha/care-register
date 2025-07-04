@@ -37,13 +37,11 @@ jobs:
         chmod +x ./chrome-linux64/chrome
         chmod +x ./chromedriver-linux64/chromedriver
 
-    # --- DEBUG STEPS TO DIAGNOSE CHROME VERSION ---
-    - name: Debug: Verify Chrome Binary Permissions and Path
+    - name: Debug:Verify Chrome Binary 
       run: ls -la ./chrome-linux64/chrome
 
-    - name: Debug: Get Version of Extracted Chrome Binary
+    - name: Debug:Get Version of Extracted Chrome Binary
       run: ./chrome-linux64/chrome --version
-    # --- END DEBUG STEPS ---
 
     - name: Run form submit script
       run: python form_submit.py
