@@ -2,9 +2,8 @@ name: Daily Car Register
 
 on:
   schedule:
-     - cron: '42 22 * * *'  # 10:18 PM CDT
-     - cron: '43 22 * * *' # Runs daily at 1:30 PM UTC (8:30 AM CDT)
-  workflow_dispatch:        # Optional: allow manual trigger
+    - cron: '27 23 * * *'  # 10:36 PM CDT
+  workflow_dispatch:
 
 jobs:
   submit-form:
@@ -18,21 +17,24 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: server time
-        run: timedatectl || date
-          
-      - name: Log current UTC time
-        run: date -u    
-
       - name: Install Selenium, Chrome, and Chromedriver
         run: |
           pip install selenium
-          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor > google.gpg
-          sudo install -o root -g root -m 644 google.gpg /etc/apt/trusted.gpg.d/
-          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list'
           sudo apt-get update
-          sudo apt-get install -y google-chrome-stable chromium-chromedriver
-          if [ ! -f /usr/bin/chromedriver ]; then sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver; fi
+          sudo apt-get install -y wget curl unzip
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt install -y ./google-chrome-stable_current_amd64.deb
+          sudo apt-get install -y chromium-chromedriver
+          sudo ln -fs /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver
+
+      - name: Log current UTC time
+        run: date -u
 
       - name: Submit parking form
         run: python form_submit.py
+
+      - name: Upload screenshot
+        uses: actions/upload-artifact@v3
+        with:
+          name: confirmation
+          path: confirmation.png
