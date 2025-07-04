@@ -2,7 +2,7 @@ name: Submit parking form
 
 on:
   schedule:
-    - cron: '0 4 * * *'  # Runs at 11:00 PM CDT (4:00 AM UTC)
+    - cron: '0 4 * * *'  # Adjust to your local time if needed
   workflow_dispatch:
 
 jobs:
@@ -18,26 +18,18 @@ jobs:
         with:
           python-version: 3.11
 
-      - name: Download and install latest Chrome + Chromedriver (stable)
+      - name: Install Chrome and Chromedriver (Ubuntu package versions)
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget unzip
-          sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo apt install -y ./google-chrome-stable_current_amd64.deb
-          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
-          echo "Detected Chrome version: $CHROME_VERSION"
-          wget https://chromedriver.storage.googleapis.com/$CHROME_VERSION/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip
-          sudo mv chromedriver /usr/bin/chromedriver
-          sudo chmod +x /usr/bin/chromedriver
+          sudo apt-get install -y google-chrome-stable chromium-chromedriver
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: pip install selenium
 
       - name: Run form submit script
         run: python form_submit.py
 
-      - name: List files for debug
+      - name: List files (debug)
         run: ls -alh
 
       - name: Upload screenshot
