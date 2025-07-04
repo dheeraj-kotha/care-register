@@ -9,8 +9,10 @@ chrome_options = Options()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-dev-shm-usage")
+# This path is correct for the setup in your GitHub Actions workflow
 chrome_options.binary_location = "/opt/chrome/chrome"
 
+# This path is correct for the setup in your GitHub Actions workflow
 service = Service("/usr/bin/chromedriver")
 driver = webdriver.Chrome(service=service, options=chrome_options)
 
@@ -30,10 +32,13 @@ try:
     driver.find_element(By.XPATH, "//button[contains(text(), 'Next')]").click()
 
     print("Clicked 'Next'. Waiting for confirmation page...")
-    time.sleep(10) # Increased sleep just in case the page takes longer to load
+    # Give it more time, or ideally, use an explicit wait for a specific element on the confirmation page
+    time.sleep(10)
 
-    # Construct the full path to save the screenshot
-    screenshot_dir = os.environ.get('GITHUB_WORKSPACE', '.')
+    # Construct the full path to save the screenshot in the GitHub Actions workspace
+    # GITHUB_WORKSPACE is the default working directory, so '.' should also work if script is in root.
+    # However, explicitly using os.getcwd() here will confirm the script's current directory.
+    screenshot_dir = os.getcwd() # Get current working directory of the script
     screenshot_path = os.path.join(screenshot_dir, "confirmation.png")
     print(f"Attempting to save screenshot to: {screenshot_path}")
 
@@ -44,7 +49,7 @@ except Exception as e:
     print(f"❌ Error encountered: {e}")
     # Capture a screenshot even on error, if possible
     try:
-        error_screenshot_path = os.path.join(os.environ.get('GITHUB_WORKSPACE', '.'), "error_screenshot.png")
+        error_screenshot_path = os.path.join(os.getcwd(), "error_screenshot.png")
         driver.save_screenshot(error_screenshot_path)
         print(f"Error screenshot saved to: {error_screenshot_path}")
     except Exception as se:
