@@ -1,14 +1,6 @@
-name: Submit parking form
-
-on:
-  schedule:
-    - cron: '0 4 * * *'
-  workflow_dispatch:
-
 jobs:
   submit-form:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -32,11 +24,24 @@ jobs:
       - name: Install dependencies
         run: pip install selenium
 
+      # --- ADD THESE DEBUG STEPS ---
+      - name: Debug - Print GITHUB_WORKSPACE and list files
+        run: |
+          echo "GITHUB_WORKSPACE is: $GITHUB_WORKSPACE"
+          ls -la $GITHUB_WORKSPACE
+          ls -la . # Also list files in current working directory
+      # --- END DEBUG STEPS ---
+
       - name: Run form submit script
         run: python form_submit.py
 
-      - name: List files for debug
-        run: ls -la  
+      # --- ADD THESE DEBUG STEPS AFTER SCRIPT RUNS ---
+      - name: Debug - List files after script run
+        run: |
+          echo "Files after script run:"
+          ls -la $GITHUB_WORKSPACE
+          ls -la .
+      # --- END DEBUG STEPS ---
 
       - name: Upload screenshot
         uses: actions/upload-artifact@v4
