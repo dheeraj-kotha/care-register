@@ -1,55 +1,77 @@
+# .github/workflows/daily-submit.yml
+# Level 0 (no spaces)
 name: Daily Form Submission
 
+# Level 0
 on:
+# Level 2 spaces
   schedule:
+# Level 4 spaces
     - cron: '0 5 * * *' # Runs every day at 05:00 UTC
+# Level 2 spaces
   workflow_dispatch: # Allows manual triggering from the GitHub UI
 
+# Level 0
 jobs:
+# Level 2 spaces
   submit-form:
+# Level 4 spaces
     runs-on: ubuntu-latest # Use the latest Ubuntu runner
 
+# Level 4 spaces
     steps:
+# Level 6 spaces
     - name: Checkout repository
-      uses: actions/checkout@v4 # Clones your repository to the runner (includes chromedriver-linux64.zip)
+      uses: actions/checkout@v4 # Clones your repository to the runner
 
+# Level 6 spaces
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.x'
 
+# Level 6 spaces
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install selenium
 
+# Level 6 spaces
     - name: Download Chrome Browser for Testing
       run: |
-        # Download Chrome 138 for Linux 64-bit directly in the workflow
-        # This URL comes from the Chrome for Testing availability page you looked at
         curl -L -o chrome-linux64.zip https://storage.googleapis.com/chrome-for-testing-public/138.0.7204.92/linux64/chrome-linux64.zip
       
+# Level 6 spaces
     - name: Extract Chrome Browser and Chromedriver
       run: |
-        unzip -o chrome-linux64.zip -d . # Extract downloaded Chrome to current dir
-        unzip -o chromedriver-linux64.zip -d . # Extract Chromedriver (from repo) to current dir
+        unzip -o chrome-linux64.zip -d .
+        unzip -o chromedriver-linux64.zip -d .
 
+# Level 6 spaces
     - name: Make Chrome and Chromedriver Executable
       run: |
         chmod +x ./chrome-linux64/chrome
         chmod +x ./chromedriver-linux64/chromedriver
 
-      # --- NEW DEBUG STEPS ---
+    # --- NEW DEBUG STEPS ---
+    # These steps are crucial for us to see why Chrome 138 isn't being picked up by Selenium.
+    # The 'name' and 'run' lines for these steps must have 6 spaces of indentation.
+# Level 6 spaces
     - name: Debug: Verify Chrome Binary Permissions and Path
-      run: ls -la ./chrome-linux64/chrome # This will show permissions and confirm path
+# Level 8 spaces
+      run: ls -la ./chrome-linux64/chrome
 
+# Level 6 spaces
     - name: Debug: Get Version of Extracted Chrome Binary
-      run: ./chrome-linux64/chrome --version # This will run the extracted Chrome and show its version
-       # --- END NEW DEBUG STEPS ---    
+# Level 8 spaces
+      run: ./chrome-linux64/chrome --version
+    # --- END NEW DEBUG STEPS ---
 
+# Level 6 spaces
     - name: Run form submit script
       run: python form_submit.py
 
+# Level 6 spaces
     - name: Upload confirmation screenshot
       uses: actions/upload-artifact@v4
       with:
