@@ -33,31 +33,31 @@ try:
 
     # Wait for the "Apartment Number" field
     apt_number_field = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.NAME, "Apartment Number:"))
+        EC.presence_of_element_located((By.NAME, "vehicleApt"))
     )
     apt_number_field.send_keys("123") # Replace "123" with the actual apartment number
 
     # Wait for and fill "Make" field
     make_field = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.NAME, "make"))
+        EC.presence_of_element_located((By.NAME, "vehicleMake"))
     )
     make_field.send_keys("Toyota")
 
     # Wait for and fill "Model" field
     model_field = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.NAME, "model"))
+        EC.presence_of_element_located((By.NAME, "vehicleModel"))
     )
     model_field.send_keys("Camry")
 
     # Wait for and fill "License Plate" field
     license_plate_field = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.NAME, "licensePlate"))
+        EC.presence_of_element_located((By.NAME, "vehicleLicensePlate"))
     )
     license_plate_field.send_keys("XYZ123")
 
     # Wait for and fill "Confirm License Plate" field
     confirm_license_plate_field = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.NAME, "confirmLicensePlate"))
+        EC.presence_of_element_located((By.NAME, "vehicleLicensePlateConfirm"))
     )
     confirm_license_plate_field.send_keys("XYZ123")
 
