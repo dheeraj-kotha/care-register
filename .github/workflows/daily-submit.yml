@@ -2,7 +2,7 @@ name: submit-form
 
 on:
   schedule:
-    - cron: '0 4 * * *'  # 4 AM UTC = 11 PM CST
+    - cron: '0 4 * * *'  # 4 AM UTC = 11 PM CDT
   workflow_dispatch:
 
 jobs:
@@ -18,17 +18,14 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Chrome
+      - name: Install specific Chrome version (v124)
         run: |
-          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo apt install -y ./google-chrome-stable_current_amd64.deb
+          wget https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_124.0.6367.91-1_amd64.deb
+          sudo apt install -y ./google-chrome-stable_124.0.6367.91-1_amd64.deb
 
-      - name: Install ChromeDriver (matching version)
+      - name: Install matching ChromeDriver (v124)
         run: |
-          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
-          echo "Detected Chrome version: $CHROME_VERSION"
-          DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
-          wget "https://chromedriver.storage.googleapis.com/${DRIVER_VERSION}/chromedriver_linux64.zip"
+          wget https://chromedriver.storage.googleapis.com/124.0.6367.91/chromedriver_linux64.zip
           unzip chromedriver_linux64.zip
           sudo mv chromedriver /usr/bin/chromedriver
           sudo chmod +x /usr/bin/chromedriver
