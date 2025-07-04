@@ -14,7 +14,7 @@ chrome_options.add_argument("--window-size=1920,1080") # Set a larger window siz
 
 # Path to chromedriver (assuming it's in the same directory or accessible via PATH)
 # You might need to adjust this path based on where it's extracted
-service = Service(executable_path='./chromedriver')
+service = Service(executable_path='./chromedriver-linux64/chromedriver')
 
 driver = None # Initialize driver to None
 try:
