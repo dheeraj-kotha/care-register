@@ -1,73 +1,47 @@
-name: Submit parking form
+name: Daily Form Submission
 
 on:
   schedule:
-    - cron: '0 4 * * *' # This runs the workflow daily at 4 AM UTC
-  workflow_dispatch: # This enables the "Run workflow" button in the GitHub UI
+    - cron: '0 5 * * *' # Runs every day at 05:00 UTC
+  workflow_dispatch # Allows manual triggering from the GitHub UI
 
 jobs:
   submit-form:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # Use the latest Ubuntu runner
+
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4 # Clones your repository to the runner
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.11
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x' # Use the latest Python 3 version
 
-      - name: Install Chrome + Chromedriver (v124)
-        run: |
-          wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/124.0.6367.91/linux64/chrome-linux64.zip
-          wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/124.0.6367.91/linux64/chromedriver-linux64.zip
-          unzip chrome-linux64.zip
-          unzip chromedriver-linux64.zip
-          sudo mv chrome-linux64 /opt/chrome
-          sudo mv chromedriver-linux64/chromedriver /usr/bin/chromedriver
-          sudo chmod +x /usr/bin/chromedriver
-          echo 'export PATH=/opt/chrome:$PATH' >> $GITHUB_ENV
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install selenium
+        # No need to install Chrome via apt-get if we use Chrome for Testing binary
 
-      - name: List contents of Chromedriver directory
-        run: ls -la ./chromedriver-linux64/    
+    - name: Extract Chrome Browser and Chromedriver
+      run: |
+        unzip -o chrome-linux64.zip -d . # Extract Chrome to current dir
+        unzip -o chromedriver-linux64.zip -d . # Extract Chromedriver to current dir
 
-      - name: Install dependencies
-        run: pip install selenium
+    - name: Make Chrome and Chromedriver Executable
+      run: |
+        chmod +x ./chrome-linux64/chrome
+        chmod +x ./chromedriver-linux64/chromedriver
 
-      - name: Debug - Print GITHUB_WORKSPACE and list files (Before Script)
-        run: |
-          echo "GITHUB_WORKSPACE is: $GITHUB_WORKSPACE"
-          echo "Contents of current directory (should be GITHUB_WORKSPACE before script):"
-          ls -la .
-          echo "Contents of /tmp (just in case):"
-          ls -la /tmp # Check if selenium saves somewhere unexpected
+    - name: Run form submit script
+      run: python form_submit.py
 
-      # ... (your existing steps before 'Run form submit script') ...
-
-      - name: Extract Chromedriver
-        run: |
-          unzip -o chromedriver-linux64.zip
-          # Assuming the zip extracts to a folder like 'chromedriver-linux64' which contains the 'chromedriver' binary
-          # Adjust 'mv' command if the extracted binary is in a different nested path, e.g., 'mv chromedriver-linux64/chromedriver-linux64/chromedriver .'
-          
-      - name: Make Chromedriver Executable
-        run: chmod +x ./chromedriver-linux64/chromedriver # Now chmod is applied to the executable in the root    
-
-      - name: Run form submit script
-        run: python form_submit.py
-
-      - name: Debug - List files after script run (Check for screenshot)
-        run: |
-          echo "Files in current directory (after script run):"
-          ls -la .
-          echo "Is confirmation.png present in current directory?"
-          find . -name "confirmation.png" # Explicitly search for the file
-
-      - name: Upload screenshot
-        uses: actions/upload-artifact@v4
-        with:
-          name: confirmation
-          path: confirmation.png
-          # If the screenshot still isn't found at 'confirmation.png' after the above debug,
-          # it might be necessary to try an absolute path, but let's debug first.
-          # path: ${{ github.workspace }}/confirmation.png # Alternative, usually same as 'confirmation.png'
+    - name: Upload confirmation screenshot
+      uses: actions/upload-artifact@v4
+      with:
+        name: confirmation-screenshot
+        path: |
+          confirmation.png
+          error_screenshot.png # Also upload error screenshot if it exists
+        if-no-files-found: ignore # Don't fail if screenshot isn't there
