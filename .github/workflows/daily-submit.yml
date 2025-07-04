@@ -34,7 +34,7 @@ jobs:
         run: python form_submit.py
 
       - name: Upload screenshot
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@4
         with:
           name: confirmation
           path: confirmation.png
