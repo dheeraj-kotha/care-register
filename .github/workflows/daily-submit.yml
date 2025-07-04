@@ -49,6 +49,9 @@ jobs:
           echo "Is confirmation.png present in current directory?"
           find . -name "confirmation.png" # Explicitly search for the file
 
+      - name: Make Chromedriver Executable
+        run: chmod +x ./chromedriver-linux64/chromedriver    
+
       - name: Upload screenshot
         uses: actions/upload-artifact@v4
         with:
