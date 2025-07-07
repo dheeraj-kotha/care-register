@@ -62,7 +62,6 @@ try:
 
     # --- STEP 3: Click 'select' for 'capitol at stonebriar' ---
     print("Attempting to select 'capitol at stonebriar' using provided HTML.")
-    # Using the precise data-property-id from the HTML you provided
     capitol_select_button = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.XPATH, "//button[@data-property-id='17001' and text()='Select']"))
     )
@@ -91,30 +90,27 @@ try:
     apt_number_field.send_keys("123")
     print("Filled 'Apartment Number'.")
 
-    # Wait for and fill "Make" field (assuming 'name' attributes are correct)
+    # UPDATE: Using By.ID for Make, Model, License Plate, and Confirm License Plate
     make_field = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.NAME, "make"))
+        EC.presence_of_element_located((By.ID, "vehicleMake")) # Changed from By.NAME to By.ID
     )
     make_field.send_keys("Toyota")
     print("Filled 'Make'.")
 
-    # Wait for and fill "Model" field (assuming 'name' attributes are correct)
     model_field = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.NAME, "model"))
+        EC.presence_of_element_located((By.ID, "vehicleModel")) # Changed from By.NAME to By.ID
     )
     model_field.send_keys("Camry")
     print("Filled 'Model'.")
 
-    # Wait for and fill "License Plate" field (assuming 'name' attributes are correct)
     license_plate_field = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.NAME, "licensePlate"))
+        EC.presence_of_element_located((By.ID, "vehicleLicensePlate")) # Changed from By.NAME to By.ID
     )
     license_plate_field.send_keys("XYZ123")
     print("Filled 'License Plate'.")
 
-    # Wait for and fill "Confirm License Plate" field (assuming 'name' attributes are correct)
     confirm_license_plate_field = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.NAME, "confirmLicensePlate"))
+        EC.presence_of_element_located((By.ID, "vehicleLicensePlateConfirm")) # Changed from By.NAME to By.ID
     )
     confirm_license_plate_field.send_keys("XYZ123")
     print("Filled 'Confirm License Plate'.")
