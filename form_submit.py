@@ -38,7 +38,7 @@ try:
     print(f"Using ChromeDriver from: {CHROMEDRIVER_EXECUTABLE_PATH}")
 
     driver = webdriver.Chrome(service=service, options=chrome_options)
-    target_url = "https://www.register2park.com/register?key=4wddrlcphom8" # Store target URL
+    target_url = "https://www.register2park.com/register" # Store target URL
     driver.get(target_url)
     print(f"Requested URL: {target_url}") # Log requested URL
     time.sleep(2) # Give a moment for any redirects to complete
