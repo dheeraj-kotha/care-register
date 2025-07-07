@@ -44,8 +44,6 @@ try:
     print(f"Actual URL after initial navigation: {driver.current_url}")
     
     # --- STEP 2: Type "capitol" and click 'next' ---
-    # Assuming there's a text input field for the property name.
-    # Trying to find the first visible text input. If this fails, we'll need a more specific locator.
     print("Attempting to find property input field...")
     property_input_field = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//input[@type='text' or @type='search' or not(@type)]"))
@@ -63,11 +61,10 @@ try:
     print(f"Actual URL after 'capitol' next: {driver.current_url}")
 
     # --- STEP 3: Click 'select' for 'capitol at stonebriar' ---
-    print("Attempting to select 'capitol at stonebriar'.")
-    # This XPath tries to find a 'Select' button either near text 'capitol at stonebriar'
-    # or a button that explicitly contains that text and says 'Select'.
+    print("Attempting to select 'capitol at stonebriar' using provided HTML.")
+    # Using the precise data-property-id from the HTML you provided
     capitol_select_button = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), 'capitol at stonebriar')]/ancestor::div[contains(@class, 'property-item')]//button[text()='Select'] | //button[contains(., 'capitol at stonebriar') and text()='Select'] | //*[contains(text(), 'capitol at stonebriar')]/following::button[text()='Select'][1]"))
+        EC.element_to_be_clickable((By.XPATH, "//button[@data-property-id='17001' and text()='Select']"))
     )
     capitol_select_button.click()
     print("Clicked 'Select' for 'capitol at stonebriar'.")
