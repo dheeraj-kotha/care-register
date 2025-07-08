@@ -87,32 +87,32 @@ try:
     apt_number_field = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.ID, "vehicleApt"))
     )
-    apt_number_field.send_keys("123")
+    apt_number_field.send_keys("1365")
     print("Filled 'Apartment Number'.")
 
     # UPDATE: Using By.ID for Make, Model, License Plate, and Confirm License Plate
     make_field = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.ID, "vehicleMake")) # Changed from By.NAME to By.ID
     )
-    make_field.send_keys("Toyota")
+    make_field.send_keys("BMW")
     print("Filled 'Make'.")
 
     model_field = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.ID, "vehicleModel")) # Changed from By.NAME to By.ID
     )
-    model_field.send_keys("Camry")
+    model_field.send_keys("360i")
     print("Filled 'Model'.")
 
     license_plate_field = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.ID, "vehicleLicensePlate")) # Changed from By.NAME to By.ID
     )
-    license_plate_field.send_keys("XYZ123")
+    license_plate_field.send_keys("RBV6983")
     print("Filled 'License Plate'.")
 
     confirm_license_plate_field = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.ID, "vehicleLicensePlateConfirm")) # Changed from By.NAME to By.ID
     )
-    confirm_license_plate_field.send_keys("XYZ123")
+    confirm_license_plate_field.send_keys("RBV6983")
     print("Filled 'Confirm License Plate'.")
 
     # Click the "Next" button (for form submission)
