@@ -2,7 +2,7 @@ name: Daily Form Submission
 
 on:
   schedule:
-    - cron: '45 15 * * *' # Runs every day at 05:00 UTC
+    - cron: '5 15 * * *' # Runs every day at 05:00 UTC
   workflow_dispatch: # Allows manual triggering from the GitHub UI
 
 jobs:
